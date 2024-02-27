@@ -1,0 +1,48 @@
+<style>
+	.containerOuter {
+		display: flex;
+		position: fixed;
+		inset: 0px;
+		flex-direction: column;
+	}
+	.containerOuter > *:nth-child(1) {
+		flex: 1;
+	}
+	.containerOuter > *:nth-child(2) {
+		border: 2px solid blue;;
+		padding: 20px;
+	}
+	.containerInner {
+		display: flex;
+		gap: 32px;
+	}
+	.containerInner > * {
+		flex: 1;
+		display: block;
+		max-width: 50%;
+		border: 1px solid red;;
+	}
+</style>
+
+<script>
+	window.captureFrame = () => {
+		const video = document.querySelector('video');
+		const canvas = document.querySelector('canvas');
+		const canvasBox = canvas.getBoundingClientRect();
+		canvas.width = canvasBox.width;
+		canvas.height = canvasBox.height;
+		const context = canvas.getContext('2d');
+		const aspectRatio = canvas.width / canvas.height;
+		context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight, 0, 0, canvas.width, canvas.width * aspectRatio)
+	}
+</script>
+
+<div class="containerOuter">
+	<div class="containerInner">
+		<video src="./25fps.mp4" controls></video>
+		<canvas></canvas>
+	</div>	
+	<div>
+		<button onclick="captureFrame()">capture</button>
+	</div>
+</div>

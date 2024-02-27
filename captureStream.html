@@ -1,0 +1,65 @@
+<style>
+	.containerOuter {
+		display: flex;
+		position: fixed;
+		inset: 0px;
+		flex-direction: column;
+	}
+	.containerOuter > *:nth-child(1) {
+		flex: 1;
+	}
+	.containerOuter > *:nth-child(2) {
+		border: 2px solid blue;;
+		padding: 20px;
+	}
+	.containerInner {
+		display: flex;
+		gap: 32px;
+	}
+	.containerInner > * {
+		flex: 1;
+		display: block;
+		max-width: 50%;
+		border: 1px solid red;;
+	}
+	.preview {
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: contain;
+	}
+</style>
+
+
+
+<div class="containerOuter">
+	<div class="containerInner">
+		<canvas></canvas>
+		<video controls autoplay></video>
+	</div>	
+	<div>
+		<!-- <button onclick="captureFrame()">capture</button> -->
+	</div>
+</div>
+
+
+<script>
+	const video = document.querySelector('video');
+	const canvas = document.querySelector('canvas');
+	const context = canvas.getContext('2d');
+
+	let down = false;
+	canvas.onmousedown = () => down = true
+	canvas.onmouseup = () => down = false
+	canvas.onmousemove = (event) => {
+		if (!down) return;
+		context.fillRect(event.clientX, event.clientY, 10, 10)
+	}
+
+	canvas.width = canvas.getBoundingClientRect().width;
+	canvas.height = canvas.getBoundingClientRect().height;
+	// context.drawImage(video, 0, 0);
+
+
+	video.srcObject = canvas.captureStream();
+
+</script>

@@ -1,0 +1,63 @@
+<style>
+	.containerOuter {
+		display: flex;
+		position: fixed;
+		inset: 0px;
+		flex-direction: column;
+	}
+	.containerOuter > *:nth-child(1) {
+		flex: 1;
+	}
+	.containerOuter > *:nth-child(2) {
+		border: 2px solid blue;;
+		padding: 20px;
+	}
+	.containerInner {
+		display: flex;
+		gap: 32px;
+	}
+	.containerInner > * {
+		flex: 1;
+		display: block;
+		max-width: 50%;
+		border: 1px solid red;;
+	}
+	.preview {
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: contain;
+	}
+</style>
+
+<script>
+	window.captureFrame = () => {
+		const video = document.querySelector('video');
+		const canvas = document.createElement('canvas');
+		const preview = document.querySelector('.preview');
+		canvas.width = video.videoWidth;
+		canvas.height = video.videoHeight;
+		const context = canvas.getContext('2d');
+		context.drawImage(video, 0, 0);
+		canvas.toBlob(blob => {
+			
+			const reader = new FileReader();
+			reader.onload = function() {
+				const dataUrl = reader.result;
+				const base64 = dataUrl.split(',')[1];
+				preview.style.backgroundImage = `url(data:image/png;base64,${base64})`
+			}
+			reader.readAsDataURL(blob);
+				
+		});
+	}
+</script>
+
+<div class="containerOuter">
+	<div class="containerInner">
+		<video src="./25fps.mp4" controls></video>
+		<div class="preview"></div>
+	</div>	
+	<div>
+		<button onclick="captureFrame()">capture</button>
+	</div>
+</div>
